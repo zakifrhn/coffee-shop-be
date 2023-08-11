@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test</h1>
+    <button onclick="sendRequest()">Send Request</button>
+    <div id="respone"></div>
+
+    <script>
+        //request using script
+
+
+        function sendRequest(){
+            const url= 'http://localhost:9091/user/';
+
+            fetch(url)
+            .then(response => response.text())
+            .then(data =>{
+                document.getElementById('respone').innerText = data;
+            })
+            .catch(error =>{
+                document.getElementById('respone').innerText = 'Error' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>

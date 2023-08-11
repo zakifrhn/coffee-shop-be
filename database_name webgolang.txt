@@ -1,0 +1,3 @@
+database_name: webgolang
+owner: postgres
+schema_name: coffeshop 

@@ -1,0 +1,18 @@
+# https://github.com/spf13/viper
+# change this file to env.dev.app.yml or somename file what do you like
+
+appName: "backgo"
+appEnv: "dev"
+appPort: 8081
+jwt:
+  secrets: "abcdabcd"
+database:
+  host: "127.0.0.1"
+  port: 5432
+  user: "db_user_here"
+  name: "db_name_here"
+  pass: "db_pass_here"
+cloudinary:
+  name: "cd_name_here"
+  key: "cd_key_here"
+  sec: "cd_secret_here"
