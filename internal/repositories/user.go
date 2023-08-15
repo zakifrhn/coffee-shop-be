@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 	"inter/internal/models"
 	"log"
@@ -87,4 +88,19 @@ func (r *RepoUser) DeleteUser(data *models.User) (string, error) {
 	}
 
 	return "1 data has been Deleted", nil
+}
+
+func (r *RepoUser) GetAuthData(user string) (*models.User, error) {
+	var result models.User
+
+	query := `SELECT id_user, email, role, pass from coffeshop."user" WHERE email = ?`
+
+	if err := r.Get(&result, r.Rebind(query), user); err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return nil, errors.New("email not found")
+		}
+
+		return nil, err
+	}
+	return &result, nil
 }

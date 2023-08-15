@@ -2,6 +2,7 @@ package routers
 
 import (
 	"inter/internal/handlers"
+	"inter/internal/middleware"
 	"inter/internal/repositories"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ func user(g *gin.Engine, d *sqlx.DB) {
 	handler := handlers.NewUser(repo)
 
 	route.POST("/", handler.PostData)
-	route.PATCH("/:id_user", handler.UpdateData)
+	route.PATCH("/:id_user", middleware.AuthJwt("admin", "user"), handler.UpdateData)
 	route.GET("/:id_user", handler.GetDataUser)
 	route.GET("/", handler.GetAllData)
 	route.DELETE("/:id_user", handler.DeleteData)

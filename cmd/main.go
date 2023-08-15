@@ -5,13 +5,15 @@ import (
 	"inter/pkg"
 	"log"
 
+	"github.com/asaskevich/govalidator"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/viper"
 )
 
 func init() {
+
+	govalidator.SetFieldsRequiredByDefault(true)
 	//set package viper in here
-	//govalidator.SetFieldsRequiredByDefault(true)
 	viper.SetConfigName("env.config")
 	viper.SetConfigType("yml")
 	viper.AddConfigPath(".")

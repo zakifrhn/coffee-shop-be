@@ -6,7 +6,7 @@ import "github.com/gin-gonic/gin"
 func CORSMiddleware(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Header("Access-Control-Allow-Credintial", "*")
-	ctx.Header("Acces-Control-Allow-Headers", "Authorization")
+	ctx.Header("Acces-Control-Allow-Headers", "Authorization, Origin, Content-Type")
 	ctx.Header("Access-Control-Allow-Methods", "POST, HEAD, PATCH, OPTIONS, GET, PUT")
 
 	if ctx.Request.Method == "OPTIONS" {

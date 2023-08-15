@@ -32,6 +32,7 @@ func New(db *sqlx.DB) *gin.Engine {
 	router.Use(cors.New(config.CorsConfig))
 
 	user(router, db)
+	auth(router, db)
 	product(router, db)
 
 	return router

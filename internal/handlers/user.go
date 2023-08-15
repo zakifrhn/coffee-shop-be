@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"fmt"
+	"inter/config"
 	"inter/internal/models"
 	"inter/internal/repositories"
 	"inter/pkg"
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,28 +26,26 @@ func (h *HandlerUser) PostData(ctx *gin.Context) {
 		Role: "user",
 	}
 
-	//	if dataUser.Role == "" {
-	//dataUser.Role = "user"
-	//return
-	//}
-	//else {
-	// 	dataUser.Role = dataUser.Role
-	// }
-
-	fmt.Printf("ini adalah role nya: %s", dataUser.Role)
-
 	if err := ctx.ShouldBind(&dataUser); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	//TODO payload validation and Hash Password here
+	_, ers = govalidator.ValidateStruct(&dataUser)
+	if ers != nil {
+		ctx.AbortWithError(401, gin.Error{
+			Err: ers,
+		})
+		return
+	}
 
 	dataUser.Pass_user, ers = pkg.HashPasword(dataUser.Pass_user)
 	if ers != nil {
 		ctx.AbortWithError(401, gin.Error{
 			Err: ers,
 		})
+		return
 	}
 
 	respone, err := h.CreateUser(&dataUser)
@@ -55,12 +54,17 @@ func (h *HandlerUser) PostData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, respone)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":      http.StatusOK,
+		"description": "OK",
+		"message":     respone,
+	})
 }
 
 func (h *HandlerUser) UpdateData(ctx *gin.Context) {
 
 	var user models.User
+	var ers error
 	user.Id_user = ctx.Param("id_user")
 
 	if err := ctx.ShouldBind(&user); err != nil {
@@ -68,7 +72,13 @@ func (h *HandlerUser) UpdateData(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Print(user)
+	user.Pass_user, ers = pkg.HashPasword(user.Pass_user)
+	if ers != nil {
+		ctx.AbortWithError(401, gin.Error{
+			Err: ers,
+		})
+		return
+	}
 
 	respone, err := h.UpdateUser(&user)
 	if err != nil {
@@ -76,7 +86,11 @@ func (h *HandlerUser) UpdateData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, respone)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":      http.StatusOK,
+		"description": "OK",
+		"message":     respone,
+	})
 }
 
 func (h *HandlerUser) GetDataUser(ctx *gin.Context) {
@@ -103,7 +117,9 @@ func (h *HandlerUser) GetAllData(ctx *gin.Context) {
 	var user models.User
 
 	if err := ctx.ShouldBindUri(&user); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		pkg.NewRes(400, &config.Result{
+			Data: err.Error(),
+		}).Send(ctx)
 		return
 	}
 
@@ -131,5 +147,9 @@ func (h *HandlerUser) DeleteData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, respone)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":      http.StatusOK,
+		"description": "OK",
+		"message":     respone,
+	})
 }
