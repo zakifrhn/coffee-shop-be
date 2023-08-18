@@ -59,37 +59,6 @@ func (r *RepoProduct) CreateProduct(data *models.ProductSet) (string, error) {
 
 func (r *RepoProduct) UpdateProduct(data *models.ProductSet) (string, error) {
 
-	// query := `UPDATE coffeshop."product"
-	// 	SET
-	// 	desc_product = $2,
-	// 	name_product = $3,
-	// 	banner_product = $4,
-	// 	price = $5,
-	// 	isfavorite = $6,
-	// 	updated_at = now()
-	// 	where id_product = $1`
-	// //var idProduct string
-
-	// _, errProd := r.Exec(query, data.Id_product, data.Desc_product, data.Name_product, data.Banner_product, data.Price, data.Isfavorite)
-	// if errProd != nil {
-	// 	fmt.Println(errProd)
-	// }
-
-	// for i := range data.Category {
-	// 	r.MustExec(`UPDATE coffeshop."bridge_product_category" SET
-	// 		id_category = $2
-	// 		where id_product = $1`, data.Id_product, &data.Category[i].Id_category)
-	// }
-
-	// for i := range data.Size {
-	// 	r.MustExec(`UPDATE coffeshop."bridge_product_size" SET
-	// 		id_size = $2
-	// 		where id_product= $1`, data.Id_product, &data.Size[i].Id_size)
-	// }
-
-	// fmt.Printf("Updated product with ID: %s\n", data.Id_product)
-	// return "Succees 1 Data product Updated", errProd
-
 	query := `UPDATE coffeshop."product" 
 	SET
 	desc_product = $2,
@@ -99,7 +68,6 @@ func (r *RepoProduct) UpdateProduct(data *models.ProductSet) (string, error) {
 	isfavorite = $6,
 	updated_at = now()
 	where id_product = $1`
-	//var idProduct string
 
 	_, errProd := r.Exec(query, data.Id_product, data.Desc_product, data.Name_product, data.Banner_product, data.Price, data.Isfavorite)
 	if errProd != nil {
@@ -183,11 +151,14 @@ func (r *RepoProduct) GetCategory(data *models.Product, page int, limit int, cat
 						p.banner_product,
 						p.name_product,
 						p.price,
-						string_agg(c.name_category, ',') as category
+						string_agg(c.name_category, ', ') as category,
+						string_agg(s.uk_product, ', ') as size
 						FROM coffeshop.product p
 
 						JOIN coffeshop.bridge_product_category bgpc ON bgpc.id_product = p.id_product
 						JOIN coffeshop.category c ON bgpc.id_category = c.id_category
+						JOIN coffeshop.bridge_product_size bgps ON bgps.id_product = p.id_product
+						JOIN coffeshop.size s ON bgps.id_size = s.id_size
 						 WHERE TRUE %s %s
 		GROUP BY p.id_product LIMIT $1 OFFSET $2`, search, category)
 
@@ -198,6 +169,7 @@ func (r *RepoProduct) GetCategory(data *models.Product, page int, limit int, cat
 		return nil, err
 	}
 	//fmt.Println(err)
+	fmt.Println(products)
 	return products, nil
 }
 

@@ -37,3 +37,10 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
+//! migration database
+//? migration sql (add the table)
+//migrate -path ./migrations/ -database "postgresql://postgres:Fazztrak2023@localhost/webgolang?sslmode=disable&search_path=coffeshop" -verbose up
+
+//?migration sql(delete the table)
+//migrate -path ./migrations/ -database "postgresql://postgres:Fazztrak2023@localhost/webgolang?sslmode=disable&search_path=coffeshop" -verbose down

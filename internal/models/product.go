@@ -13,9 +13,8 @@ type Product struct {
 	Isfavorite     bool       `db:"isfavorite" form:"isfavorite" json:"isfavorite"`
 	CreatedAt      *time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt      *time.Time `db:"updated_at" json:"updated_at"`
-	Category       []Category `db:"bridge_product_category" form:"category" json:"category"`
-	Size           []Size     `db:"bridge_product_size" form:"size" json:"size"`
 	NameCtg        string     `db:"category" json:"name_category" `
+	NameSize       string     `db:"size" json:"name_size"`
 }
 
 type ProductSet struct {

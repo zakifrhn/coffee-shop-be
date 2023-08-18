@@ -34,9 +34,9 @@ func (h *HandlerUser) PostData(ctx *gin.Context) {
 	//TODO payload validation and Hash Password here
 	_, ers = govalidator.ValidateStruct(&dataUser)
 	if ers != nil {
-		ctx.AbortWithError(401, gin.Error{
-			Err: ers,
-		})
+		pkg.NewRes(401, &config.Result{
+			Data: ers.Error(),
+		}).Send(ctx)
 		return
 	}
 
