@@ -1,5 +1,5 @@
 CREATE TABLE coffeshop.product (
-	id_product uuid NOT NULL DEFAULT coffeshop.uuid_generate_v4(),
+	id_product uuid NOT NULL DEFAULT gen_random_uuid(),
 	desc_product varchar(255) NOT NULL,
 	name_product varchar(255) NOT NULL,
 	banner_product varchar(255) NULL,

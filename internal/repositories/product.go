@@ -2,9 +2,7 @@ package repositories
 
 import (
 	"fmt"
-	"inter/config"
 	"inter/internal/models"
-	"math"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -16,10 +14,6 @@ type RepoProduct struct {
 func NewProduct(db *sqlx.DB) *RepoProduct {
 	return &RepoProduct{db}
 }
-
-// type category struct {
-// 	NameCategory string `db:"name_category" json:"name_category" `
-// }
 
 func (r *RepoProduct) CreateProduct(data *models.ProductSet) (string, error) {
 
@@ -165,96 +159,8 @@ func (r *RepoProduct) GetCategory(data *models.Product, page int, limit int, cat
 	var products []models.Product
 	err := r.Select(&products, query, limit, offset)
 	if err != nil {
-		//fmt.Println(err)
 		return nil, err
 	}
-	//fmt.Println(err)
 	fmt.Println(products)
 	return products, nil
-}
-
-// func (r *RepoProduct) GetNameProduct(data *models.Product, page, limit int, name string) ([]models.Product, error) {
-
-// 	offset := (page - 1) * limit
-
-// 	query := (`SELECT
-// 						p.id_product,
-// 						p.banner_product,
-// 						p.name_product,
-// 						p.price
-// 						FROM coffeshop.product p
-
-// 						JOIN coffeshop.bridge_product_category bgpc ON bgpc.id_product = p.id_product
-// 						JOIN coffeshop.category c ON bgpc.id_category = c.id_category
-// 						WHERE lower(p.name_product) LIKE $3
-// 						 GROUP BY p.id_product LIMIT $1 OFFSET $2`)
-
-// 	// if name != "" {
-// 	// 	query += " AND p.name_product ILIKE '%'|| $3 || '%'"
-// 	// }
-// 	var products []models.Product
-// 	err := r.Select(&products, query, limit, offset, "%"+name+"%")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	fmt.Println(err)
-// 	return products, nil
-// }
-
-func (r *RepoProduct) GetNameProduct(params models.Metas) (*config.Result, error) {
-	var data models.Product
-	var metas config.Metas
-	var filterQuery string
-	var metaQuery string
-	var count int
-	var args []interface{}
-	var filter []interface{}
-
-	if params.Name != "" {
-		filterQuery = "AND name_product = ?"
-		args = append(args, params.Name)
-		filter = append(filter, params.Name)
-	}
-
-	offset := (params.Page - 1) * params.Limit
-	metaQuery = "LIMIT ? OFFSET ?"
-	args = append(args, params.Limit, offset)
-
-	cs := fmt.Sprintf(`SELECT COUNT(id_product) as count from coffeshop."product" WHERE true %s`, filterQuery)
-	err := r.Get(&count, r.Rebind(cs), filter...)
-	if err != nil {
-		return nil, err
-	}
-
-	query := fmt.Sprintf(`
-	SELECT
-	p.id_product,
-	p.banner_product,
-	p.name_product,
-	p.price,
-	string_agg(c.name_category, ',') as category
-	FROM coffeshop.product p
-
-	JOIN coffeshop.bridge_product_category bgpc ON bgpc.id_product = p.id_product
-	JOIN coffeshop.category c ON bgpc.id_category = c.id_category
-	GROUP BY id_product  WHERE TRUE %s %s 
-	`, filterQuery, metaQuery)
-
-	err = r.Select(&data, r.Rebind(query), args...)
-	if err != nil {
-		return nil, err
-	}
-
-	check := math.Ceil(float64(count) / float64(params.Limit))
-	metas.Total = count
-	if count > 0 && params.Page != int(check) {
-		metas.Next = params.Page + 1
-	}
-
-	if params.Page != 1 {
-		metas.Prev = params.Page - 1
-	}
-
-	return &config.Result{Data: data, Meta: metas}, nil
-
 }

@@ -1,0 +1,34 @@
+
+version: '3.9'
+services:
+  #container 1
+  goback:
+      container_name: goapps-compose
+      image: itsfarhanz/goapps:latest  
+      ports:
+        - '9092:9091'
+      networks:
+        - db-app
+      environment:
+        DB_HOST: '172.18.0.2' 
+        DB_NAME: 'dbcoffee'
+        DB_USER: 'postgres' 
+        DB_PASS: 'Fazztrak2023' 
+        DB_PORT: '5432'
+
+  #container 2    
+  database:
+    container_name: coffeshop-db-compose  
+    image: postgres:alpine3.18
+    ports:
+      - '5445:5432'
+    networks:
+      - db-app
+    environment:
+      POSTGRES_USER: 'postgres' 
+      POSTGRES_PASSWORD: 'Fazztrak2023' 
+      POSTGRES_DB: 'dbcoffee'
+
+networks:
+  db-app:
+    external: true

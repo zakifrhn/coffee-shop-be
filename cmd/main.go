@@ -13,6 +13,7 @@ import (
 func init() {
 
 	govalidator.SetFieldsRequiredByDefault(true)
+
 	//set package viper in here
 	viper.SetConfigName("env.config")
 	viper.SetConfigType("yml")
@@ -40,6 +41,13 @@ func main() {
 
 //! migration database
 //? migration sql (add the table)
+//! after dockerfile
+//migrate -path ./migrations/ -database "postgresql://postgres:Fazztrak2023@localhost:5440/dbcoffee?sslmode=disable&search_path=coffeshop" -verbose up
+
+//! after dockercompose
+//migrate -path ./migrations/ -database "postgresql://postgres:Fazztrak2023@localhost:5445/dbcoffee?sslmode=disable&search_path=coffeshop" -verbose up
+
+//! before docker
 //migrate -path ./migrations/ -database "postgresql://postgres:Fazztrak2023@localhost/webgolang?sslmode=disable&search_path=coffeshop" -verbose up
 
 //?migration sql(delete the table)

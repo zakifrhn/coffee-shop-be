@@ -40,24 +40,10 @@ type Size struct {
 }
 
 type Metas struct {
-	Page  int
-	Limit int
-	Name  string
+	Page     int
+	Limit    int
+	Name     string
+	Category string
 }
 
 type Products []Product
-
-// type CategoryProduct struct {
-// 	NameCategory string `db:"name_category" json:"name_category" `
-// }
-
-// type MetaProduct struct {
-// 	Page      int   `form:"page" json:"page"`
-// 	Limit     int   `form:"limit" json:"limit"`
-// 	TotalData int64 `form:"total_data" json:"total_data"`
-// }
-
-// type PaginationResponse struct {
-// 	Data interface{} `json:"data"`
-// 	Meta Meta        `json:"meta"`
-// }

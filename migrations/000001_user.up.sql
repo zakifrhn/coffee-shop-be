@@ -1,5 +1,5 @@
 CREATE TABLE coffeshop.user (
-	id_user uuid NOT NULL DEFAULT coffeshop.uuid_generate_v4(),
+	id_user uuid NOT NULL DEFAULT gen_random_uuid(),
 	email varchar(255) NOT NULL,
 	pass varchar(255) NOT NULL,
 	phone_number varchar(20) NULL,

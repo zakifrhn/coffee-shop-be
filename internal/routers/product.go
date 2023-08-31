@@ -20,5 +20,4 @@ func product(g *gin.Engine, db *sqlx.DB) {
 	route.DELETE("/:id", middleware.AuthJwt("admin"), handler.DeleteData)
 	route.GET("/", middleware.AuthJwt("admin", "user"), handler.GetAllData)
 	route.GET("/product-category", handler.GetProductCategory)
-	route.GET("/product-name", handler.GetProductName)
 }
