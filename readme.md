@@ -56,7 +56,7 @@ go get github.com/spf13/viper
 go get -u github.com/gin-gonic/gin
 ```
 
--testify
+- testify
 ```
 go get -u github.com/stretchr/testify/assert 
 ```
