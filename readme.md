@@ -23,6 +23,8 @@
 - Implement Hashing password
 - Implement Payload Validation
 - Implement docker compose and docker file
+- Implement Unit testing in package respone, jwt and bcrypt
+- Implement Integration testing in service user
 
 
 ## Library in this project
