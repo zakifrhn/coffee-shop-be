@@ -12,10 +12,10 @@ import (
 )
 
 type HandlerUser struct {
-	*repositories.RepoUser
+	repositories.RepoUserIF
 }
 
-func NewUser(r *repositories.RepoUser) *HandlerUser {
+func NewUser(r repositories.RepoUserIF) *HandlerUser {
 	return &HandlerUser{r}
 }
 
@@ -54,11 +54,7 @@ func (h *HandlerUser) PostData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status":      http.StatusOK,
-		"description": "OK",
-		"message":     respone,
-	})
+	pkg.NewRes(200, respone).Send(ctx)
 }
 
 func (h *HandlerUser) UpdateData(ctx *gin.Context) {
@@ -130,6 +126,7 @@ func (h *HandlerUser) GetAllData(ctx *gin.Context) {
 	}
 
 	ctx.JSON(200, respone)
+
 }
 
 func (h *HandlerUser) DeleteData(ctx *gin.Context) {

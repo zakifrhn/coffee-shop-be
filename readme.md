@@ -56,7 +56,7 @@ go get github.com/spf13/viper
 go get -u github.com/gin-gonic/gin
 ```
 
--testify
+- testify
 ```
 go get -u github.com/stretchr/testify/assert 
 ```
@@ -111,6 +111,11 @@ https://docs.docker.com/desktop/install/windows-install/
 6. Dockerhub
 ```
 docker pull itsfarhanz/goapps
+```
+
+7. Run the unit testing
+```
+go test -v ./...
 ```
 
 

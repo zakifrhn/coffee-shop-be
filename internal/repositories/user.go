@@ -3,11 +3,21 @@ package repositories
 import (
 	"errors"
 	"fmt"
+	"inter/config"
 	"inter/internal/models"
 	"log"
 
 	"github.com/jmoiron/sqlx"
 )
+
+type RepoUserIF interface {
+	CreateUser(data *models.User) (*config.Result, error)
+	UpdateUser(data *models.User) (string, error)
+	GetUser(data *models.User) (interface{}, error)
+	GetAllUser(data *models.User) ([]models.User, error)
+	DeleteUser(data *models.User) (string, error)
+	GetAuthData(user string) (*models.User, error)
+}
 
 type RepoUser struct {
 	*sqlx.DB
@@ -17,7 +27,7 @@ func NewUser(db *sqlx.DB) *RepoUser {
 	return &RepoUser{db}
 }
 
-func (r *RepoUser) CreateUser(data *models.User) (string, error) {
+func (r *RepoUser) CreateUser(data *models.User) (*config.Result, error) {
 	query := `INSERT INTO coffeshop."user" ( 
 				email, 
 				pass, 
@@ -32,10 +42,11 @@ func (r *RepoUser) CreateUser(data *models.User) (string, error) {
 
 	_, err := r.NamedExec(query, data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "1 data user created", nil
+	// return "1 data user created", nil
+	return &config.Result{Message: "1 data user created"}, nil
 }
 
 func (r *RepoUser) UpdateUser(data *models.User) (string, error) {
